@@ -31,11 +31,39 @@ int main(void) {
         printf("Not found\n");
     }
 
+    if (deposit(find_account(head, 1), 500) == 0) {
+        printf("Deposit success\n");
+    } else {
+        printf("Deposit failed\n");
+    }
+
+    if (withdraw(find_account(head, 3), 1000) == 0) {
+        printf("Withdraw success\n");
+
+    } else {
+        printf("Withdraw failed\n");
+    }
+
+    if (withdraw(find_account(head, 99), 10) == 0) {
+        printf("Withdraw success\n");
+    } else {
+        printf("Withdraw failed\n");
+    }
+
+    if (deposit(find_account(head, 2), -50) == 0) {
+        printf("Deposit success\n");
+    } else {
+        printf("Deposit failed\n");
+    }
+
+    print_accounts(head);
+    
     struct Account *current = head;
     while (current != NULL) {
         struct Account *next = current->next;
         free_account(current);
         current = next;
     }
+
     return 0;
 }

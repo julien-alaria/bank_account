@@ -61,3 +61,24 @@ void print_accounts(const struct Account *head) {
     }
 }
 
+int deposit(struct Account *account, long amount) {
+    if (account == NULL || amount <= 0) {
+        return -1;
+    }
+    account->balance += amount;
+    return 0;
+}
+
+int withdraw(struct Account *account, long amount) {
+    if (account == NULL || amount <= 0) {
+        return -1;
+    }
+
+    if (account->balance < amount) {
+        return -1;
+    }
+
+    account->balance -= amount;
+    return 0;
+}
+

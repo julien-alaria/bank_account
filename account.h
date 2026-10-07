@@ -13,5 +13,7 @@ void free_account(struct Account *account);
 void append_account(struct Account **head, struct Account *new_account);
 void print_accounts(const struct Account *head);
 struct Account *find_account(struct Account *head, int number);
+int deposit(struct Account *account, long amount);
+int withdraw(struct Account *account, long amount);
 
 #endif
