@@ -1,6 +1,15 @@
 #include <stdio.h>
 #include "account.h"
 
+static void test_transfer(struct Account *head, int from, int to, long amount) {
+    if (transfer(find_account(head, from), find_account(head, to), amount) == 0) {
+        printf("Transfer %d -> %d (%ld): success\n", from, to, amount);
+    } else {
+        printf("Transfer %d -> %d (%ld): failed\n", from, to, amount);
+    }
+    print_accounts(head);
+}
+
 int main(void) {
     struct Account *head = NULL;
     const char *names[3] = {"Alice", "Alexandrine", "Bob"};
@@ -56,7 +65,10 @@ int main(void) {
         printf("Deposit failed\n");
     }
 
-    print_accounts(head);
+    test_transfer(head, 1, 3, 500);
+    test_transfer(head, 2, 3, 5000);   
+    test_transfer(head, 1, 1, 500);   
+    test_transfer(head, 1, 99, 500); 
     
     struct Account *current = head;
     while (current != NULL) {

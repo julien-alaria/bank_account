@@ -82,3 +82,23 @@ int withdraw(struct Account *account, long amount) {
     return 0;
 }
 
+int transfer(struct Account *from, struct Account *to, long amount) {
+    if (from == NULL || to == NULL) {
+        return -1;
+    }
+
+    if (from == to) {
+        return -1;
+    }
+
+    if (withdraw(from, amount) != 0) {
+        return -1;
+    }
+
+    if (deposit(to, amount) != 0) {
+        deposit(from, amount);
+        return -1;
+    }
+    return 0;
+}
+

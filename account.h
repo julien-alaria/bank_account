@@ -15,5 +15,6 @@ void print_accounts(const struct Account *head);
 struct Account *find_account(struct Account *head, int number);
 int deposit(struct Account *account, long amount);
 int withdraw(struct Account *account, long amount);
+int transfer(struct Account *from, struct Account *to, long amount);
 
 #endif
