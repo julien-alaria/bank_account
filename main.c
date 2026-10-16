@@ -69,6 +69,12 @@ int main(void) {
     test_transfer(head, 2, 3, 5000);   
     test_transfer(head, 1, 1, 500);   
     test_transfer(head, 1, 99, 500); 
+
+    add_operation(find_account(head, 1), 'D', 500);
+    add_operation(find_account(head, 1), 'W', 200);
+    print_history(find_account(head, 1));
+    print_history(find_account(head, 99));
+
     
     struct Account *current = head;
     while (current != NULL) {
