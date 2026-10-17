@@ -70,12 +70,34 @@ int main(void) {
     test_transfer(head, 1, 1, 500);   
     test_transfer(head, 1, 99, 500); 
 
-    add_operation(find_account(head, 1), 'D', 500);
-    add_operation(find_account(head, 1), 'W', 200);
+    deposit(find_account(head, 1), 500);
+    transfer(find_account(head, 1), find_account(head, 3), 500);
+    printf("Compte 1 :\n");
     print_history(find_account(head, 1));
-    print_history(find_account(head, 99));
-
+    printf("Compte 3 :\n");
+    print_history(find_account(head, 3));
     
+    if (delete_account(&head, 2) == 0) {
+        printf("Deleted 2\n");
+    } else {
+        printf("Delete 2 failed\n");
+    }
+    print_accounts(head);
+
+    if (delete_account(&head, 1) == 0) {
+        printf("Deleted 1\n");
+    } else {
+        printf("Delete 1 failed\n");
+    }
+    print_accounts(head);
+
+    if (delete_account(&head, 99) == 0) {
+        printf("Delete 99\n");
+    } else {
+        printf("Delete 99 failed\n");
+    }
+    print_accounts(head);
+
     struct Account *current = head;
     while (current != NULL) {
         struct Account *next = current->next;

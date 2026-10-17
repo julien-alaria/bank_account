@@ -25,5 +25,6 @@ int withdraw(struct Account *account, long amount);
 int transfer(struct Account *from, struct Account *to, long amount);
 int add_operation(struct Account *account, char type, long amount);
 void print_history(const struct Account *account);
+int delete_account(struct Account **head, int number);
 
 #endif

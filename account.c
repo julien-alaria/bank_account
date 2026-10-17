@@ -72,6 +72,11 @@ int deposit(struct Account *account, long amount) {
     if (account == NULL || amount <= 0) {
         return -1;
     }
+
+    if (add_operation(account, 'D', amount) != 0) {
+        return -1;
+    }
+
     account->balance += amount;
     return 0;
 }
@@ -80,8 +85,12 @@ int withdraw(struct Account *account, long amount) {
     if (account == NULL || amount <= 0) {
         return -1;
     }
-
+  
     if (account->balance < amount) {
+        return -1;
+    }
+
+    if (add_operation(account, 'W', amount) != 0) {
         return -1;
     }
 
@@ -133,4 +142,24 @@ void print_history(const struct Account *account) {
         printf("%c %ld\n", current->type, current->amount);
         current = current->next;
     }
+}
+
+int delete_account(struct Account **head, int number) {
+    struct Account *previous = NULL;
+    struct Account *current = *head;
+
+    while (current != NULL) {
+        if (current->number == number) {
+            if (previous == NULL) {
+                *head = current->next;
+            } else {
+                previous->next = current->next;
+            }
+            free_account(current);
+            return 0;
+        }
+        previous = current;
+        current = current->next;
+    }
+    return -1;
 }
