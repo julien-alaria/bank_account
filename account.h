@@ -26,5 +26,8 @@ int transfer(struct Account *from, struct Account *to, long amount);
 int add_operation(struct Account *account, char type, long amount);
 void print_history(const struct Account *account);
 int delete_account(struct Account **head, int number);
+int save_accounts(const struct Account *head, const char *filename);
+struct Account *load_accounts(const char *filename);
+void free_accounts(struct Account *head);
 
 #endif

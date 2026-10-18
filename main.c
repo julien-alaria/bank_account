@@ -97,13 +97,15 @@ int main(void) {
         printf("Delete 99 failed\n");
     }
     print_accounts(head);
-
-    struct Account *current = head;
-    while (current != NULL) {
-        struct Account *next = current->next;
-        free_account(current);
-        current = next;
+    
+    if (save_accounts(head, "accounts.txt") != 0) {
+        printf("Save failed\n");
     }
+    struct Account *loaded = load_accounts("accounts.txt");
+    print_accounts(loaded);
+
+    free_accounts(loaded);
+    free_accounts(head);
 
     return 0;
 }

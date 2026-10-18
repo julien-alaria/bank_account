@@ -163,3 +163,49 @@ int delete_account(struct Account **head, int number) {
     }
     return -1;
 }
+
+int save_accounts(const struct Account *head, const char *filename) {
+    FILE *f = fopen(filename, "w");
+    if (f == NULL) {
+        return -1;
+    }
+
+    const struct Account *current = head;
+    while (current != NULL) {
+        fprintf(f, "%d %s %ld\n", current->number, current->owner, current->balance);
+        current = current->next;
+    }
+    fclose(f);
+    return 0;
+}
+
+void free_accounts(struct Account *head) {
+    struct Account *current = head;
+    while (current != NULL) {
+        struct Account *next = current->next;
+        free_account(current);
+        current = next;
+    }
+}
+
+struct Account *load_accounts(const char *filename) {
+    FILE *f = fopen(filename, "r");
+    if (f == NULL) {
+        return NULL;
+    }
+    struct Account *head = NULL;
+    int number;
+    char owner[50];
+    long balance;
+    while (fscanf(f, "%d %49s %ld", &number, owner, &balance) == 3) {
+        struct Account *a = create_account(number, owner, balance);
+        if (a == NULL) {
+            free_accounts(head);
+            fclose(f);
+            return NULL;
+        }
+        append_account(&head, a);
+    }
+    fclose(f);
+    return head;
+}
