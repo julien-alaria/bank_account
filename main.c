@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "account.h"
 
-static empty_buffer(void) {
+static void empty_buffer(void) {
     int c;
     while ((c = getchar()) != '\n' && c != EOF) {
     }
@@ -25,7 +25,7 @@ int main(void) {
                 char owner[50];
                 long balance;
                 printf("Number, titular, solde (in cents) : ");
-                if (scanf("%d %49s %ld", &number, owner, &balance) != 1) {
+                if (scanf("%d %49s %ld", &number, owner, &balance) != 3) {
                     empty_buffer();
                     printf("Saisie invalide\n");
                     break;
@@ -45,17 +45,28 @@ int main(void) {
                 break;
 
             case 3: {
-                int account_number;
-                int deposit_amount;
-                scanf("Account number : ", &account_number);
-                struct Account *found = find_account(head, account_number);
-                if (found != NULL) {
-                    printf("%s\n", found->owner);
-                } else {
-                    printf("Account not found\n");
+                int number;
+                long amount;
+                printf("Account number : ");
+                if (scanf("%d", &number) != 1) {
+                    empty_buffer();
+                    printf("Invalid input\n");
+                    break;
                 }
-                scanf("Deposit amount : ", &deposit_amount);
-                if (deposit(find_account(head, account_number), deposit_amount) == 0) {
+                empty_buffer();
+                struct Account *found = find_account(head, number);
+                if (found == NULL) {
+                    printf("Account not found\n");
+                    break;
+                }
+                printf("Deposit amount (cents) : ");
+                if (scanf("%ld", &amount) != 1) {
+                    empty_buffer();
+                    printf("Invalid input\n");
+                    break;
+                }
+                empty_buffer();
+                if (deposit(found, amount) == 0) {
                     printf("Deposit success\n");
                 } else {
                     printf("Deposit failed\n");
@@ -63,26 +74,8 @@ int main(void) {
                 break;
             };
                 
-            case 4: {
-                int account_number;
-                int withdraw_amount;
-                scanf("Account number : ", &account_number);
-                struct Account *found = find_account(head, account_number);
-                if (found != NULL) {
-                    printf("%s\n", found->owner);
-                } else {
-                    printf("Account not found\n");
-                }
-                scanf("Deposit amount : ", &withdraw_amount);
-                if (withdraw(find_account(head, account_number), withdraw_amount) == 0) {
-                    printf("Withdraw success\n");
-
-                } else {
-                    printf("Withdraw failed\n");
-                }
-                break;
-            };
-                  
+            case 4:
+                break;    
             case 5:
                 break;
             case 6:
