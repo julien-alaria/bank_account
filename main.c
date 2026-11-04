@@ -16,8 +16,10 @@ int main(void) {
         if (scanf("%d", &choice) != 1) { 
             empty_buffer();
             choice = -1;
+        } else {
+            empty_buffer();
         }
-        empty_buffer();
+        
 
         switch (choice) {
             case 1: {
