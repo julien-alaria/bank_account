@@ -12,7 +12,12 @@ int main(void) {
     int choice;
 
     do {
-        printf("...menu...\n");
+        printf("Menu\n");
+        printf("1. Add account\n");
+        printf("2. Show accounts\n");
+        printf("3. Deposit\n");
+        printf("4. Withdraw\n");
+        printf("Enter your choice :");
         if (scanf("%d", &choice) != 1) { 
             empty_buffer();
             choice = -1;
@@ -26,13 +31,21 @@ int main(void) {
                 int number;
                 char owner[50];
                 long balance;
-                printf("Number, titular, solde (in cents) : ");
+                printf("Number, owner, balance (in cents) : ");
                 if (scanf("%d %49s %ld", &number, owner, &balance) != 3) {
                     empty_buffer();
-                    printf("Saisie invalide\n");
+                    printf("Invalid input\n");
                     break;
                 }
                 empty_buffer();
+                if (balance < 0) {
+                    printf("Invalid balance\n");
+                    break;
+                }
+                if (find_account(head, number) != NULL) {
+                    printf("Account number already exists\n");
+                    break;
+                }
                 struct Account *a = create_account(number, owner, balance);
                 if (a == NULL) {
                     printf("malloc failed\n");
@@ -76,8 +89,36 @@ int main(void) {
                 break;
             };
                 
-            case 4:
-                break;    
+            case 4:{
+                int number;
+                long amount;
+                printf("Account number : ");
+                if (scanf("%d", &number) != 1) {
+                    empty_buffer();
+                    printf("Invalid input\n");
+                    break;
+                }
+                empty_buffer();
+                struct Account *found = find_account(head, number);
+                if (found == NULL) {
+                    printf("Account not found\n");
+                    break;
+                }
+                printf("Withdraw amount (cents) : ");
+                if (scanf("%ld", &amount) != 1) {
+                    empty_buffer();
+                    printf("Invalid input\n");
+                    break;
+                }
+                empty_buffer();
+                if (withdraw(found, amount) == 0) {
+                    printf("Withdraw success\n");
+                } else {
+                    printf("Withdraw failed\n");
+                }
+                break; 
+            }
+                  
             case 5:
                 break;
             case 6:
@@ -85,13 +126,27 @@ int main(void) {
             case 7:
                 break;
             case 8:
+                if (save_accounts(head, "accounts.txt") == 0) {
+                    printf("Saved\n");
+                } else {
+                    printf("Save failed\n");
+                }
                 break;
-            case 9:
+            case 9: {
+                struct Account *loaded = load_accounts("accounts.txt");
+                if (loaded == NULL) {
+                    printf("Load failed or file empty\n");
+                    break;
+                }
+                free_accounts(head);
+                head = loaded;
+                printf("Loaded\n");
                 break;
+            }
             case 0:
                 break;
             default:
-                printf("Choix invalide\n");
+                printf("Invalid choice\n");
 
         }
     } while (choice != 0);
