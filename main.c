@@ -17,6 +17,7 @@ int main(void) {
         printf("2. Show accounts\n");
         printf("3. Deposit\n");
         printf("4. Withdraw\n");
+        printf("7. Delete Account\n");
         printf("Enter your choice :");
         if (scanf("%d", &choice) != 1) { 
             empty_buffer();
@@ -121,10 +122,41 @@ int main(void) {
                   
             case 5:
                 break;
-            case 6:
+            case 6: {
+                int number;
+                printf("Account number : ");
+                if (scanf("%d", &number) != 1) {
+                    empty_buffer();
+                    printf("Invalid input\n");
+                    break;
+                }
+                empty_buffer();
+                struct Account *found = find_account(head, number);
+                if (found == NULL) {
+                    printf("Account not found\n");
+                    break;
+                }
+                print_history(found);
                 break;
-            case 7:
+            }
+                
+            case 7: {
+                int number;
+                printf("Account number : ");
+                if (scanf("%d", &number) != 1) {
+                    empty_buffer();
+                    printf("Invalid input\n");
+                    break;
+                }
+                empty_buffer();
+                if (delete_account(&head, number) == 0) {
+                    printf("Deleted\n");
+                } else {
+                    printf("Account not found\n");
+                }
                 break;
+            }
+                
             case 8:
                 if (save_accounts(head, "accounts.txt") == 0) {
                     printf("Saved\n");
@@ -132,6 +164,7 @@ int main(void) {
                     printf("Save failed\n");
                 }
                 break;
+
             case 9: {
                 struct Account *loaded = load_accounts("accounts.txt");
                 if (loaded == NULL) {
@@ -143,6 +176,7 @@ int main(void) {
                 printf("Loaded\n");
                 break;
             }
+
             case 0:
                 break;
             default:
