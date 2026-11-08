@@ -46,7 +46,7 @@ int main(void) {
         printf("9. Load\n");
         printf("0. Quit\n");
         printf("Enter your choice : ");
-        if (scanf("%d", &choice) != 1) { 
+        if (scanf("%d", &choice) != 1) {
             empty_buffer();
             choice = -1;
         } else {
@@ -111,25 +111,17 @@ int main(void) {
             case 4: {
                 int number;
                 long amount;
-                printf("Account number : ");
-                if (scanf("%d", &number) != 1) {
-                    empty_buffer();
-                    printf("Invalid input\n");
+                if (read_int("Account number : ", &number) != 0) {
                     break;
                 }
-                empty_buffer();
                 struct Account *found = find_account(head, number);
                 if (found == NULL) {
                     printf("Account not found\n");
                     break;
                 }
-                printf("Withdraw amount (cents) : ");
-                if (scanf("%ld", &amount) != 1) {
-                    empty_buffer();
-                    printf("Invalid input\n");
+                if (read_long("Withdraw amount (cents) : ", &amount) != 0) {
                     break;
                 }
-                empty_buffer();
                 if (withdraw(found, amount) == 0) {
                     printf("Withdraw success\n");
                 } else {
@@ -142,29 +134,15 @@ int main(void) {
                 int from_number;
                 int to_number;
                 long amount;
-                printf("From account : ");
-                if (scanf("%d", &from_number) != 1) {
-                    empty_buffer();
-                    printf("Invalid input\n");
+                if (read_int("From account : ", &from_number) != 0) {
                     break;
                 }
-                empty_buffer();
-                printf("To account : ");
-                if (scanf("%d", &to_number) != 1) {
-                    empty_buffer();
-                    printf("Invalid input\n");
+                if (read_int("To account : ", &to_number) != 0) {
                     break;
                 }
-                empty_buffer();
-
-                printf("Amount (cents) : ");
-                if (scanf("%ld", &amount) != 1) {
-                    empty_buffer();
-                    printf("Invalid input\n");
+                if (read_long("Amount (cents) : ", &amount) != 0) {
                     break;
                 }
-                empty_buffer();
-
                 struct Account *from = find_account(head, from_number);
                 struct Account *to = find_account(head, to_number);
                 if (from == NULL || to == NULL) {
@@ -181,13 +159,9 @@ int main(void) {
 
             case 6: {
                 int number;
-                printf("Account number : ");
-                if (scanf("%d", &number) != 1) {
-                    empty_buffer();
-                    printf("Invalid input\n");
+                if (read_int("Account number : ", &number) != 0) {
                     break;
                 }
-                empty_buffer();
                 struct Account *found = find_account(head, number);
                 if (found == NULL) {
                     printf("Account not found\n");
@@ -210,13 +184,14 @@ int main(void) {
                 break;
             }
 
-            case 8:
+            case 8: {
                 if (save_accounts(head, "accounts.txt") == 0) {
                     printf("Saved\n");
                 } else {
                     printf("Save failed\n");
                 }
                 break;
+            }
 
             case 9: {
                 struct Account *loaded = load_accounts("accounts.txt");
