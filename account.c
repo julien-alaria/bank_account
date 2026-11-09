@@ -172,7 +172,7 @@ int save_accounts(const struct Account *head, const char *filename) {
 
     const struct Account *current = head;
     while (current != NULL) {
-        fprintf(f, "%d %s %ld\n", current->number, current->owner, current->balance);
+        fprintf(f, "%d %ld\n%s\n", current->number, current->balance, current->owner);
         current = current->next;
     }
     fclose(f);
@@ -197,7 +197,12 @@ struct Account *load_accounts(const char *filename) {
     int number;
     char owner[50];
     long balance;
-    while (fscanf(f, "%d %49s %ld", &number, owner, &balance) == 3) {
+    while (fscanf(f, "%d %ld", &number, &balance) == 2) {
+        fgetc(f);
+        if (fgets(owner, sizeof(owner), f) == NULL) {
+            break;
+        }
+        owner[strcspn(owner, "\n")] = '\0';
         struct Account *a = create_account(number, owner, balance);
         if (a == NULL) {
             free_accounts(head);

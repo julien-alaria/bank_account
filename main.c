@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 #include "account.h"
 
 static void empty_buffer(void) {
@@ -26,6 +27,22 @@ static int read_long(const char *prompt, long *out) {
         return -1;
     }
     empty_buffer();
+    return 0;
+}
+
+static int read_string(const char *prompt, char *out, size_t size) {
+    printf("%s", prompt);
+    if (fgets(out, (int)size, stdin) == NULL) {
+        return -1;
+    }
+    if (strchr(out, '\n') == NULL) {
+        empty_buffer();
+    }
+    out[strcspn(out, "\n")] = '\0';
+    if (out[0] == '\0') {
+        printf("Invalid input\n");
+        return -1;
+    }
     return 0;
 }
 
@@ -58,13 +75,15 @@ int main(void) {
                 int number;
                 char owner[50];
                 long balance;
-                printf("Number, owner, balance (in cents) : ");
-                if (scanf("%d %49s %ld", &number, owner, &balance) != 3) {
-                    empty_buffer();
-                    printf("Invalid input\n");
+                if (read_int("Number : ", &number) != 0) {
                     break;
                 }
-                empty_buffer();
+                if (read_string("Owner : ", owner, sizeof(owner)) != 0) {
+                    break;
+                }
+                if (read_long("Balance (in cents): ", &balance) != 0) {
+                    break;
+                }
                 if (balance < 0) {
                     printf("Invalid balance\n");
                     break;
