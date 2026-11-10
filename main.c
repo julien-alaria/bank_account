@@ -9,24 +9,34 @@ static void empty_buffer(void) {
 }
 
 static int read_int(const char *prompt, int *out) {
+    char line[64];
     printf("%s", prompt);
-    if (scanf("%d", out) != 1) {
+    if (fgets(line, sizeof(line), stdin) == NULL) {
+        return -1;
+    }
+    if (strchr(line, '\n') == NULL) {
         empty_buffer();
+    }
+    if (sscanf(line, "%d", out) != 1) {
         printf("Invalid input\n");
         return -1;
     }
-    empty_buffer();
     return 0;
 }
 
 static int read_long(const char *prompt, long *out) {
+    char line[64];
     printf("%s", prompt);
-    if (scanf("%ld", out) != 1) {
+    if (fgets(line, sizeof(line), stdin) == NULL) {
+        return -1;
+    }
+    if (strchr(line, '\n') == NULL) {
         empty_buffer();
+    }
+    if (sscanf(line, "%ld", out) != 1) {
         printf("Invalid input\n");
         return -1;
     }
-    empty_buffer();
     return 0;
 }
 
@@ -62,12 +72,8 @@ int main(void) {
         printf("8. Save\n");
         printf("9. Load\n");
         printf("0. Quit\n");
-        printf("Enter your choice : ");
-        if (scanf("%d", &choice) != 1) {
-            empty_buffer();
+        if (read_int("Enter your choice : ", &choice) != 0) {
             choice = -1;
-        } else {
-            empty_buffer();
         }
 
         switch (choice) {
@@ -81,7 +87,7 @@ int main(void) {
                 if (read_string("Owner : ", owner, sizeof(owner)) != 0) {
                     break;
                 }
-                if (read_long("Balance (in cents): ", &balance) != 0) {
+                if (read_long("Balance (in cents) : ", &balance) != 0) {
                     break;
                 }
                 if (balance < 0) {

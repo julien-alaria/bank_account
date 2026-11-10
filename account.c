@@ -164,6 +164,36 @@ int delete_account(struct Account **head, int number) {
     return -1;
 }
 
+static int count_operations(const struct Account *account) {
+    int count = 0;
+    const struct Operation *current = account->history;
+    while (current != NULL) {
+        count++;
+        current = current->next;
+    }
+    return count;
+}
+
+static int append_operation(struct Account *account, char type, long amount) {
+    struct Operation *op = malloc(sizeof(struct Operation));
+    if (op == NULL) {
+        return -1;
+    }
+    op->type = type;
+    op->amount = amount;
+    op->next = NULL;
+    if (account->history == NULL) {
+        account->history = op;
+        return 0;
+    }
+    struct Operation *last = account->history;
+    while (last->next != NULL) {
+        last = last->next;
+    }
+    last->next = op;
+    return 0;
+}
+
 int save_accounts(const struct Account *head, const char *filename) {
     FILE *f = fopen(filename, "w");
     if (f == NULL) {
@@ -173,6 +203,12 @@ int save_accounts(const struct Account *head, const char *filename) {
     const struct Account *current = head;
     while (current != NULL) {
         fprintf(f, "%d %ld\n%s\n", current->number, current->balance, current->owner);
+        fprintf(f, "%d\n", count_operations(current));
+        const struct Operation *op = current->history;
+        while (op != NULL) {
+            fprintf(f, "%c %ld\n", op->type, op->amount);
+            op = op->next;
+        }
         current = current->next;
     }
     fclose(f);

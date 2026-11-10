@@ -1,4 +1,2 @@
-1 1000
-Marie Claire Dubois
-2 500
-Bob
+1 500
+Jean Dupont
