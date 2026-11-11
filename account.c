@@ -245,6 +245,23 @@ struct Account *load_accounts(const char *filename) {
             fclose(f);
             return NULL;
         }
+        int count;
+        if (fscanf(f, "%d", &count) != 1) {
+            free_account(a);
+            free_accounts(head);
+            fclose(f);
+            return NULL;
+        }
+        for (int i = 0; i < count; i++) {
+            char type;
+            long amount;
+            if (fscanf(f, " %c %ld", &type, &amount) != 2 || append_operation(a, type, amount) != 0) {
+                free_account(a);
+                free_accounts(head);
+                fclose(f);
+                return NULL;
+            }
+        }
         append_account(&head, a);
     }
     fclose(f);
